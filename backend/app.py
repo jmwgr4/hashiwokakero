@@ -5,7 +5,10 @@ from solver import solve
 import json
 import os
 import time
+import sys
 
+# Ensure the backend directory is in the python path for Vercel
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(__name__)
 CORS(app)
@@ -19,7 +22,11 @@ generation_stats = {}
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
-LEADERBOARD_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'leaderboard.json')
+# On Vercel, we must use /tmp for any file writing
+if os.environ.get('VERCEL'):
+    LEADERBOARD_FILE = '/tmp/leaderboard.json'
+else:
+    LEADERBOARD_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'leaderboard.json')
 
 # --- LEADERBOARD HELPER FUNCTIONS ---
 def load_leaderboard():
@@ -55,8 +62,10 @@ def load_leaderboard():
 def save_leaderboard(data):
     """Writes the leaderboard data to the JSON file."""
 
-    os.makedirs(os.path.dirname(LEADERBOARD_FILE), exist_ok=True)
     try:
+        db_dir = os.path.dirname(LEADERBOARD_FILE)
+        if db_dir and not os.path.exists(db_dir):
+            os.makedirs(db_dir, exist_ok=True)
         with open(LEADERBOARD_FILE, 'w') as f:
             json.dump(data, f, indent=2) 
         return True
@@ -355,7 +364,11 @@ def save_progression_stats():
     try:
         data = request.get_json()
         
-        stats_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'progression_stats.json')
+        if os.environ.get('VERCEL'):
+            stats_file = '/tmp/progression_stats.json'
+        else:
+            stats_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'progression_stats.json')
+            
         os.makedirs(os.path.dirname(stats_file), exist_ok=True)
         
         with open(stats_file, 'w') as f:
