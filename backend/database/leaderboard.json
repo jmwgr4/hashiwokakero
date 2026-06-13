@@ -28,5 +28,11 @@
     "time": 0,
     "grid_size": 2,
     "is_ai": false
+  },
+  {
+    "name": "Hello",
+    "time": 0,
+    "grid_size": 2,
+    "is_ai": false
   }
 ]
