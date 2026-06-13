@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from game import Game
-from solver import solve
+# Use package-qualified imports so modules resolve when deployed as a package
+from backend.game import Game
+from backend.solver import solve
 import json
 import os
 import time
