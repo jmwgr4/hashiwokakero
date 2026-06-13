@@ -1,0 +1,32 @@
+[
+  {
+    "name": "\ud83e\udd16 AI Backtracking Solver",
+    "time": 0,
+    "grid_size": 14,
+    "is_ai": true
+  },
+  {
+    "name": "AI Backtracking Solver",
+    "time": 0,
+    "grid_size": 13,
+    "is_ai": true
+  },
+  {
+    "name": "1",
+    "time": 0,
+    "grid_size": 6,
+    "is_ai": false
+  },
+  {
+    "name": "2",
+    "time": 0,
+    "grid_size": 2,
+    "is_ai": false
+  },
+  {
+    "name": "3",
+    "time": 0,
+    "grid_size": 2,
+    "is_ai": false
+  }
+]

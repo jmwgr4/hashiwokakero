@@ -1,0 +1,118 @@
+{
+  "timestamp": "2025-12-23T06:43:15.450Z",
+  "ai_results": [
+    {
+      "grid": "2x2",
+      "time": "0.000060",
+      "playerTime": 0
+    },
+    {
+      "grid": "3x3",
+      "time": "0.000051",
+      "playerTime": 0
+    },
+    {
+      "grid": "4x4",
+      "time": "0.000190",
+      "playerTime": 0
+    },
+    {
+      "grid": "5x5",
+      "time": "0.000279",
+      "playerTime": 0
+    },
+    {
+      "grid": "6x6",
+      "time": "0.016292",
+      "playerTime": 0
+    },
+    {
+      "grid": "7x7",
+      "time": "0.015943",
+      "playerTime": 0
+    },
+    {
+      "grid": "8x8",
+      "time": "0.017373",
+      "playerTime": 0
+    },
+    {
+      "grid": "9x9",
+      "time": "0.014659",
+      "playerTime": 0
+    },
+    {
+      "grid": "10x10",
+      "time": "0.044878",
+      "playerTime": 0
+    },
+    {
+      "grid": "11x11",
+      "time": "2.514705",
+      "playerTime": 2
+    }
+  ],
+  "generation_results": [
+    {
+      "grid": "2x2",
+      "attempts": 1,
+      "time": 8.870000056049321e-05,
+      "success": true
+    },
+    {
+      "grid": "3x3",
+      "attempts": 3,
+      "time": 0.00013770000077784061,
+      "success": true
+    },
+    {
+      "grid": "4x4",
+      "attempts": 3,
+      "time": 0.0003180999992764555,
+      "success": true
+    },
+    {
+      "grid": "5x5",
+      "attempts": 1,
+      "time": 0.00014209999972081278,
+      "success": true
+    },
+    {
+      "grid": "6x6",
+      "attempts": 4,
+      "time": 0.0006075000001146691,
+      "success": true
+    },
+    {
+      "grid": "7x7",
+      "attempts": 23,
+      "time": 0.0033296000001428183,
+      "success": true
+    },
+    {
+      "grid": "8x8",
+      "attempts": 16,
+      "time": 0.0026146000000153435,
+      "success": true
+    },
+    {
+      "grid": "9x9",
+      "attempts": 56,
+      "time": 0.010754800001450349,
+      "success": true
+    },
+    {
+      "grid": "10x10",
+      "attempts": 98,
+      "time": 0.02627539999957662,
+      "success": true
+    },
+    {
+      "grid": "11x11",
+      "attempts": 29,
+      "time": 0.008290100000522216,
+      "success": true
+    }
+  ],
+  "highest_grid": 12
+}

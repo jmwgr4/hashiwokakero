@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Graph Bridges — Hashiwokakero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>🌉 Hashiwokakero - Bridge Builder</h1>
+    <div class="instructions">
+        <p><strong>🎯 Goal:</strong> Connect all islands into a single connected group. Each number (1-8) shows how many bridges that island needs.</p>
+        <p><strong>🎮 Controls:</strong> Click and drag from one island to another to create bridges. Bridges must be orthogonal and cannot cross.</p>
+        <p><strong>💡 Hints:</strong> Use the "Hint" button for assistance, but note that it adds a 15-second penalty to your time!</p>
+    </div>
+    <div id="start-screen"> 
+        <div id="grid-info">
+            <h2>Progressive Hashi Challenge</h2>
+            <p>Start with 2x2 grid and progress through larger grids!</p>
+            <p>Current Grid: <span id="current-grid-display">2x2</span></p>
+        </div>
+        <button id="start-game">🎮 Start 2x2 Grid</button>
+        
+        <!-- Integrated Leaderboard -->
+        <div id="leaderboard-section" style="margin-top: 30px;">
+            <h3>🏆 Leaderboard - Highest Grid Achieved</h3>
+            <div id="leaderboard-display">
+                <p>Loading leaderboard...</p>
+            </div>
+        </div>
+    </div>
+        
+    <div id="game-controls" style="display: none;">
+        <div id="timer-display"> <span id="timer">00:00</span></div>
+        <div id="controls">
+            <button id="reset">🔄 Reset</button>
+            <button id="solve">🤖 AI Solve</button>
+            <button id="hint">💡 Hint</button>
+            <button id="generate">🎲 Generate Puzzle</button>
+            <button id="back-to-2x2">⬅️ Back to 2x2</button>
+            <button id="exit-game">❌ Exit Game</button>
+        </div>
+    </div>
+
+    <div id="grid"></div>
+
+    <footer class="names">
+        <h1>Bagabaldo, Ostos, Rollorata</h1>
+    </footer>
+    <script src="/script.js"></script>
+</body>
+</html>

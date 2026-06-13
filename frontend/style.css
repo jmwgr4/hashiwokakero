@@ -1,0 +1,436 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #e8f4f8;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+#start-screen {
+    margin: 40px 0;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+#grid-info {
+    margin-bottom: 20px;
+}
+
+#grid-info h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+#current-grid-display {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 1.2em;
+}
+
+#leaderboard-section {
+    border-top: 2px solid #ecf0f1;
+    padding-top: 20px;
+}
+
+#leaderboard-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+#start-game {
+    background: #27ae60;
+    font-size: 18px;
+    padding: 15px 30px;
+    margin-top: 20px;
+}
+
+#start-game:hover {
+    background: #229954;
+}
+
+#game-controls {
+    margin: 20px 0;
+}
+
+#controls {
+    margin: 20px 0;
+}
+
+#difficulty {
+    margin: 10px 0;
+}
+
+#timer-display {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+select {
+    background: #ecf0f1;
+    border: 2px solid #34495e;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+button:hover {
+    background: #2980b9;
+}
+
+#exit-game {
+    background: #e74c3c;
+}
+
+#exit-game:hover {
+    background: #c0392b;
+}
+#grid {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+    gap: 8px;
+    margin: 20px auto;
+    width: fit-content;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    user-select: none;
+}
+.cell.island {
+    background: #ecf0f1;
+    border-radius: 50%;
+    font-size: 1.8em;
+    font-weight: bold;
+    border: 3px solid #34495e;
+    cursor: pointer;
+    color: #2c3e50;
+    z-index: 2;
+    position: relative;
+}
+.cell.island:hover {
+    background: #d5dbdb;
+}
+.cell.empty {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.cell.empty:hover {
+    background: rgba(52, 152, 219, 0.2);
+    border-radius: 4px;
+}
+.bridge {
+    background: #000000;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 1px;
+    position: relative;
+    z-index: 1;
+}
+.bridge:hover {
+    background: #333333;
+}
+.bridge.horizontal {
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.bridge.vertical {
+    height: calc(100% - 60px);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#timer {
+    font-family: 'Courier New', monospace;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #34495e;
+    display: inline-block;
+    min-width: 120px;
+}
+.possible-target {
+    background: #2ecc71 !important;
+    box-shadow: 0 0 10px #2ecc71;
+    animation: pulse 1s infinite;
+}
+.bridge-animation {
+    background: #f39c12;
+    z-index: 15;
+    border-radius: 2px;
+    animation: bridgeGrow 0.3s ease-out;
+    position: relative;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+@keyframes bridgeGrow {
+    0% { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.win-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(45deg, #f39c12, #e74c3c);
+    color: white;
+    padding: 20px 40px;
+    border-radius: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 1000;
+    animation: celebration 0.5s ease-out;
+}
+
+@keyframes celebration {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+#status {
+    margin: 10px 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-complete {
+    background: #2ecc71;
+    color: white;
+}
+
+.status-invalid {
+    background: #e74c3c;
+    color: white;
+}
+
+.status-progress {
+    background: #f39c12;
+    color: white;
+}
+
+.cell.island {
+    transition: all 0.3s ease;
+}
+
+.bridge {
+    transition: all 0.2s ease;
+}
+
+.cell.empty:hover::after {
+    content: '⊕';
+    position: absolute;
+    color: #3498db;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(52, 152, 219, 0.5);
+}
+
+.drag-preview {
+    background: #2ecc71;
+    z-index: 5;
+    opacity: 0.7;
+    position: relative;
+    border: 1px dashed #27ae60;
+    animation: dragPulse 0.5s infinite;
+}
+
+@keyframes dragPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.9; }
+}
+
+.cell.island {
+    transition: all 0.2s ease;
+}
+
+.cell.island:active {
+    transform: scale(0.95);
+}
+
+.hint-bridge {
+    background: #f39c12;
+    z-index: 15;
+    position: relative;
+    border: 2px dashed #e67e22;
+    animation: hintPulse 0.3s infinite;
+}
+
+@keyframes hintPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* --- Leaderboard Page Styles --- */
+
+/* Basic layout for the new page */
+header {
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.back-to-game-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-to-game-btn:hover {
+    background-color: #2980b9;
+}
+
+.leaderboard-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Filtering Buttons --- */
+
+.difficulty-filter {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 2px solid #34495e;
+    background: #ecf0f1;
+    color: #34495e;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background: #bdc3c7;
+}
+
+.filter-btn.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* --- Leaderboard Table --- */
+
+#leaderboard-display table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+
+#leaderboard-display th, #leaderboard-display td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#leaderboard-display th {
+    background-color: #34495e;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+#leaderboard-display tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping */
+}
+
+/* Highlight the Top Ranks */
+.rank-gold {
+    background-color: #fffacd !important; /* Light yellow */
+    font-weight: bold;
+}
+.rank-silver {
+    background-color: #ecf0f1 !important; /* Light gray */
+}
+.rank-bronze {
+    background-color: #f5e3d7 !important; /* Light bronze color */
+}
+
+/* Center Time column for better alignment */
+#leaderboard-display td:last-child {
+    text-align: center;
+    font-family: monospace;
+}
+
+/* --- Styling for the Leaderboard Button --- */
+
+#show-leaderboard-btn {
+    /* SIZE & SPACING (Matching #start-game) */
+    font-size: 18px;
+    padding: 15px 30px;
+    margin-top: 20px;
+    
+    /* APPEARANCE (Distinct color) */
+    background: #3498db; /* Techy Blue for distinction */
+    color: #ffffff; /* White text */
+    font-weight: bold;
+    text-decoration: none; /* Required for <a> tag */
+    text-align: center;
+    line-height: 1; 
+    cursor: pointer;
+    border: none;
+    border-radius: 8px; /* Standard rounding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    
+    /* NO HOVER/TRANSITION */
+    /* Remove any transition properties to ensure instant color/state */
+}
+
+/* Ensure consistent look even on hover/active states */
+#show-leaderboard-btn:hover,
+#show-leaderboard-btn:active {
+    background: #3498db; /* Keep the same blue color */
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transform: none;
+}
+.status-ai-solved {
+    background: #3498db; /* Blue */
+    color: white;
+}
