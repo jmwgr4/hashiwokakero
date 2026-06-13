@@ -34,5 +34,17 @@
     "time": 0,
     "grid_size": 2,
     "is_ai": false
+  },
+  {
+    "name": "hello",
+    "time": 0,
+    "grid_size": 2,
+    "is_ai": false
+  },
+  {
+    "name": "asdfasdf",
+    "time": 0,
+    "grid_size": 2,
+    "is_ai": false
   }
 ]

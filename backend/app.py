@@ -8,8 +8,13 @@ import os
 import time
 import sys
 
-# Ensure the backend directory is in the python path for Vercel
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Ensure the project parent directory is on sys.path so both of these work:
+# - `python -m backend.app` (package mode, used by deployments)
+# - `python backend/app.py` (direct run during local development)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 app = Flask(__name__)
 CORS(app)
@@ -100,7 +105,8 @@ def submit_score_route():
         player_found = False
         for entry in leaderboard:
             if entry['name'] == name:
-                if grid_size > entry['grid_size']:
+                # Update if grid size is higher OR same grid size with a better time
+                if grid_size > entry['grid_size'] or (grid_size == entry['grid_size'] and int(time) < entry['time']):
                     entry['grid_size'] = grid_size
                     entry['time'] = int(time)
                     entry['is_ai'] = is_ai

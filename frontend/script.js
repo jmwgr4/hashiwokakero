@@ -453,7 +453,7 @@ async function submitScore(name, time, grid_size, is_ai = false) {
     }
 }
 
-function showWinMessage() {
+async function showWinMessage() {
     const elapsed = game.elapsed_time || 0;
     const minutes = Math.floor(elapsed / 60);
     const seconds = Math.floor(elapsed % 60);
@@ -465,9 +465,9 @@ function showWinMessage() {
     if (game.ai_solved) {
         // AI solved - ask for name only if not already entered
         if (!playerNameEntered) {
-            const playerName = prompt('AI solved the puzzle! Enter your name to save your progress up to ' + (playerProgress) + 'x' + (playerProgress) + ':');
+            const playerName = await customPrompt(`AI solved! Enter name to save progress (${playerProgress}x${playerProgress}):`);
             if (playerName && playerName.trim()) {
-                submitScore(playerName.trim(), elapsed, playerProgress, false);
+                await submitScore(playerName.trim(), elapsed, playerProgress, false);
                 playerNameEntered = true;
             }
         }
@@ -513,9 +513,9 @@ function showWinMessage() {
         
         if (gridSize >= 15) {
             // Reached maximum - ask for name and go back to 2x2
-            const playerName = prompt('🎉 Congratulations! You completed all grids! Enter your name for the leaderboard:');
+            const playerName = await customPrompt('🎉 Max grids reached! Enter your name:');
             if (playerName && playerName.trim()) {
-                submitScore(playerName.trim(), elapsed, gridSize, false);
+                await submitScore(playerName.trim(), elapsed, gridSize, false);
             }
             nextGridText = '<p>🎉 Maximum grid size reached! Going back to 2x2.</p>';
             nextGridButton = `<button id="back-to-start-btn" style="padding: 10px 20px; margin: 5px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">Back to 2x2</button>`;
@@ -555,10 +555,10 @@ function showWinMessage() {
                 await startNextGrid();
             };
             
-            document.getElementById('stop-btn').onclick = () => {
-                const playerName = prompt('Enter your name to save your progress (' + gridSize + 'x' + gridSize + '):');
+            document.getElementById('stop-btn').onclick = async () => {
+                const playerName = await customPrompt(`Save progress (${gridSize}x${gridSize})? Enter name:`);
                 if (playerName && playerName.trim()) {
-                    submitScore(playerName.trim(), elapsed, gridSize, false);
+                    await submitScore(playerName.trim(), elapsed, gridSize, false);
                 }
                 message.remove();
                 backTo2x2();
@@ -571,6 +571,35 @@ function showWinMessage() {
         };
     }
 }
+
+async function customPrompt(message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('name-modal');
+        const title = document.getElementById('name-modal-title');
+        const input = document.getElementById('name-modal-input');
+        const submitBtn = document.getElementById('name-modal-submit');
+        const cancelBtn = document.getElementById('name-modal-cancel');
+
+        title.textContent = message;
+        input.value = '';
+        modal.style.display = 'flex';
+        input.focus();
+
+        const cleanup = (result) => {
+            modal.style.display = 'none';
+            submitBtn.onclick = null;
+            cancelBtn.onclick = null;
+            input.onkeydown = null;
+            resolve(result);
+        };
+
+        submitBtn.onclick = () => cleanup(input.value);
+        cancelBtn.onclick = () => cleanup(null);
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') cleanup(input.value);
+        };
+    });
+}    
 
 async function fetchAndStoreLeaderboard() {
     try {
@@ -654,14 +683,15 @@ async function refreshLeaderboard() {
     renderLeaderboardTable();
 }
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.leaderboard-container') && document.getElementById('leaderboard-display')) {
         // This is leaderboard.html
         initLeaderboard();
     } else if (document.getElementById('start-screen')) {
-        document.getElementById('start-game').onclick = startGame;
+        const el = document.getElementById('start-game');
+        if (el) el.onclick = startGame;
     }
-};
+});
 
 
 
@@ -867,18 +897,26 @@ document.onmouseup = () => {
 };
 
 // Start game button
-document.getElementById('start-game').onclick = async () => {
-    await startGame();
-};
+const _startGameBtn = document.getElementById('start-game');
+if (_startGameBtn) {
+    _startGameBtn.onclick = async () => {
+        await startGame();
+    };
+}
 
-document.getElementById('reset').onclick = async () => {
+const _resetBtn = document.getElementById('reset');
+if (_resetBtn) {
+    _resetBtn.onclick = async () => {
     const res = await fetch('/reset', {method: 'POST'});
     const data = await res.json();
     game = data;
     renderGrid();
 };
+}
 
-document.getElementById('exit-game').onclick = async () => {
+const _exitGameBtn = document.getElementById('exit-game');
+if (_exitGameBtn) {
+    _exitGameBtn.onclick = async () => {
     // Check current puzzle completion status
     const isCurrentPuzzleComplete = game && game.completed;
     const currentGrid = game ? (game.current_grid_size || currentGridSize) : currentGridSize;
@@ -941,10 +979,13 @@ document.getElementById('exit-game').onclick = async () => {
     
     // Ensure the game object is reset
     game = {grid: [], bridges: []};
-};
+    };
+}
 
-document.getElementById('solve').onclick = async () => {
-    const btn = document.getElementById('solve');
+const _solveBtn = document.getElementById('solve');
+if (_solveBtn) {
+    _solveBtn.onclick = async () => {
+        const btn = document.getElementById('solve');
     
     // Show confirmation dialog
     const confirmed = confirm('Using AI solver will end your current progress and save your highest achieved grid (' + playerProgress + 'x' + playerProgress + ') to the leaderboard. Continue?');
@@ -990,7 +1031,8 @@ document.getElementById('solve').onclick = async () => {
         btn.disabled = false;
         btn.textContent = 'AI Solve';
     }
-};
+    };
+}
 
 async function startNextGrid() {
     try {
@@ -1045,12 +1087,13 @@ function exitToStart() {
     if (finalGrid > 2 && !playerNameEntered) {
         const confirmed = confirm(message + ' Save to leaderboard?');
         if (confirmed) {
-            const playerName = prompt('Enter your name for the leaderboard:');
+            customPrompt('Enter name for leaderboard:').then(async (playerName) => {
             if (playerName && playerName.trim()) {
                 const elapsed = game ? (game.elapsed_time || 0) : 0;
                 submitScore(playerName.trim(), elapsed, finalGrid, false);
                 playerNameEntered = true;
             }
+            });
         }
     }
     
@@ -1111,7 +1154,9 @@ async function backTo2x2() {
     }
 }
 
-document.getElementById('hint').onclick = async () => {
+const _hintBtn = document.getElementById('hint');
+if (_hintBtn) {
+    _hintBtn.onclick = async () => {
     if (!game || !game.grid || game.grid.length === 0) {
         console.warn("Cannot use hint: Game not started.");
         return; 
@@ -1139,9 +1184,12 @@ document.getElementById('hint').onclick = async () => {
         showHintBridge(data.hint);
         tryAddBridge({x: data.hint.x1, y: data.hint.y1}, {x: data.hint.x2, y: data.hint.y2});
     }
-};
+    };
+}
 
-document.getElementById('generate').onclick = async () => {
+const _generateBtn = document.getElementById('generate');
+if (_generateBtn) {
+    _generateBtn.onclick = async () => {
     // Clear existing timer
     if (typeof timerInterval !== 'undefined' && timerInterval !== null) {
         clearInterval(timerInterval);
@@ -1178,24 +1226,28 @@ document.getElementById('generate').onclick = async () => {
     
     // Force initial status reset
     updateGameStatus(true, false);
-};
+    };
+}
 
-document.getElementById('back-to-2x2').onclick = async () => {
-    await backTo2x2();
-};
+const _backTo2x2Btn = document.getElementById('back-to-2x2');
+if (_backTo2x2Btn) {
+    _backTo2x2Btn.onclick = async () => {
+        await backTo2x2();
+    };
+}
 
 // Initialize leaderboard on page load
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('leaderboard-display')) {
         initLeaderboard();
     }
-    
+
     // Update current grid display
     const gridDisplay = document.getElementById('current-grid-display');
     if (gridDisplay) {
         gridDisplay.textContent = `${currentGridSize}x${currentGridSize}`;
     }
-};
+});
 
 function updateGridSize() {
     const grid = document.getElementById('grid');
