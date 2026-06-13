@@ -15,6 +15,10 @@ game = Game()
 # Global tracking for generation statistics
 generation_stats = {}
 
+# Define absolute path for frontend directory relative to this file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
+
 LEADERBOARD_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'leaderboard.json')
 
 # --- LEADERBOARD HELPER FUNCTIONS ---
@@ -114,11 +118,11 @@ def submit_score_route():
 
 @app.route('/')
 def index():
-    return send_from_directory('../frontend', 'index.html')
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('../frontend', filename)
+    return send_from_directory(FRONTEND_DIR, filename)
 
 @app.route('/init', methods=['GET'])
 def init():
